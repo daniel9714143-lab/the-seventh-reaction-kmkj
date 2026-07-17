@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 // Copy this file to openai.local.php. Keep the copied file private.
 return [
-    'api_key' => 'REPLACE_WITH_YOUR_OPENAI_API_KEY',
+    'gemini_api_key' => 'REPLACE_WITH_YOUR_GEMINI_API_KEY',
+    'gemini_model' => 'gemini-3.5-flash',
+    'gemini_base_url' => 'https://generativelanguage.googleapis.com/v1beta',
+    'api_key' => '',
     'model' => 'gpt-5.6-sol',
     'base_url' => 'https://api.openai.com/v1',
 ];

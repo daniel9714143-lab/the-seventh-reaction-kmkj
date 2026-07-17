@@ -1,9 +1,13 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/config/openai.php';
-$bondBotSettings = openAiSettings();
+$bondBotSettings = bondBotSettings();
 $bondBotConfigured = $bondBotSettings['configured'];
-$bondBotStatus = $bondBotSettings['provider'] === 'vercel-ai-gateway' ? 'AI GATEWAY CONNECTED' : 'REAL AI ONLINE';
+$bondBotStatus = match ($bondBotSettings['provider']) {
+    'google-gemini' => 'GEMINI AI ONLINE',
+    'vercel-ai-gateway' => 'AI GATEWAY CONNECTED',
+    default => 'OPENAI ONLINE',
+};
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: SAMEORIGIN');
 header('Referrer-Policy: same-origin');
@@ -17,13 +21,13 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#06141b">
   <meta name="description" content="The Seventh Reaction — an EC015 Chemistry adventure across the real KMKJ campus.">
-  <link rel="manifest" href="manifest.webmanifest?v=70">
+  <link rel="manifest" href="manifest.webmanifest?v=71">
   <link rel="icon" href="assets/seventh-reaction-icon.svg" type="image/svg+xml">
   <title>The Seventh Reaction · KMKJ Chemistry RPG</title>
-  <link rel="stylesheet" href="styles.css?v=70">
+  <link rel="stylesheet" href="styles.css?v=71">
 </head>
 <body>
-  <main id="app-root" class="game-shell" data-build="70" data-ai-configured="<?= $bondBotConfigured ? 'true' : 'false' ?>">
+  <main id="app-root" class="game-shell" data-build="71" data-ai-configured="<?= $bondBotConfigured ? 'true' : 'false' ?>">
     <header class="topbar pixel-panel">
       <div class="brand-lockup">
         <span class="brand-mark" aria-hidden="true">VII</span>
@@ -136,7 +140,7 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
           <button id="local-continue" class="pixel-button secondary hidden" type="button">CONTINUE LOCAL SAVE</button>
           <button id="demo-player" class="text-button" type="button">PLAY OFFLINE DEMO</button>
         </div>
-        <small>BUILD 70 · PHONE + TABLET + LAPTOP READY</small>
+        <small>BUILD 71 · GEMINI + OPENAI BOND BOT READY</small>
       </div>
     </section>
 
@@ -286,17 +290,17 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
   </main>
 
   <div id="orientation-tip" class="orientation-tip hidden" role="status">PORTRAIT MODE READY · ROTATE FOR A WIDER CAMPUS VIEW</div>
-  <script src="device.js?v=70"></script>
-  <script src="map-data.js?v=70"></script>
-  <script src="content.js?v=70"></script>
-  <script src="state.js?v=70"></script>
-  <script src="sprites.js?v=70"></script>
-  <script src="game.js?v=70"></script>
-  <script src="runtime.js?v=70"></script>
-  <script src="interiors.js?v=70"></script>
-  <script src="minigames.js?v=70"></script>
-  <script src="audio.js?v=70"></script>
-  <script src="assistant.js?v=70"></script>
-  <script src="app.js?v=70"></script>
+  <script src="device.js?v=71"></script>
+  <script src="map-data.js?v=71"></script>
+  <script src="content.js?v=71"></script>
+  <script src="state.js?v=71"></script>
+  <script src="sprites.js?v=71"></script>
+  <script src="game.js?v=71"></script>
+  <script src="runtime.js?v=71"></script>
+  <script src="interiors.js?v=71"></script>
+  <script src="minigames.js?v=71"></script>
+  <script src="audio.js?v=71"></script>
+  <script src="assistant.js?v=71"></script>
+  <script src="app.js?v=71"></script>
 </body>
 </html>

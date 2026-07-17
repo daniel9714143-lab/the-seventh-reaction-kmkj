@@ -1328,7 +1328,7 @@
     }
     renderHud();
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js?v=70', {updateViaCache: 'none'})
+      navigator.serviceWorker.register('sw.js?v=71', {updateViaCache: 'none'})
         .then(registration => registration.update())
         .catch(() => { ui.saveLight.className = 'offline'; });
     }

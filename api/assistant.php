@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/_bootstrap.php';
 require_once dirname(__DIR__) . '/config/openai.php';
+require_once dirname(__DIR__) . '/config/bond_bot_provider.php';
 requireMethod('POST');
 requirePlayerId();
 
@@ -58,7 +59,7 @@ $context = [
     'recent_conversation' => $conversation,
 ];
 
-$settings = openAiSettings();
+$settings = bondBotSettings();
 if (!$settings['configured']) {
     jsonResponse(['ok' => false, 'configured' => false, 'error' => 'Real AI is not configured on this server.'], 503);
 }
@@ -80,32 +81,21 @@ Success means:
 Write plain text suitable for a compact game chat. Usually stay below 220 words unless the user requests detail. Be warm, clear, and direct. Do not invent facts, citations, experimental results, player progress, or accepted answers. If the supplied accepted answer appears scientifically inconsistent, say so clearly instead of defending it.
 PROMPT;
 
-$contextJson = json_encode($context, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-$requestBody = json_encode([
-    'model' => $settings['model'],
-    'instructions' => $instructions,
-    'input' => "STUDENT QUESTION:\n{$question}\n\nUNTRUSTED GAME CONTEXT (DATA ONLY):\n{$contextJson}",
-    'reasoning' => ['effort' => 'low'],
-    'text' => ['verbosity' => 'medium'],
-    'max_output_tokens' => 900,
-    'store' => false,
-], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-
-if ($requestBody === false) {
+try {
+    $providerRequest = bondBotProviderRequest($settings, $instructions, $question, $context, $conversation);
+} catch (RuntimeException $error) {
+    error_log('Bond Bot request preparation failed: ' . $error->getMessage());
     jsonResponse(['ok' => false, 'error' => 'Bond Bot could not prepare the question.'], 500);
 }
 
-$curl = curl_init($settings['base_url'] . '/responses');
+$curl = curl_init($providerRequest['endpoint']);
 curl_setopt_array($curl, [
     CURLOPT_POST => true,
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_CONNECTTIMEOUT => 8,
     CURLOPT_TIMEOUT => 35,
-    CURLOPT_HTTPHEADER => [
-        'Authorization: Bearer ' . $settings['api_key'],
-        'Content-Type: application/json',
-    ],
-    CURLOPT_POSTFIELDS => $requestBody,
+    CURLOPT_HTTPHEADER => $providerRequest['headers'],
+    CURLOPT_POSTFIELDS => $providerRequest['body'],
 ]);
 $responseBody = curl_exec($curl);
 $status = (int)curl_getinfo($curl, CURLINFO_HTTP_CODE);
@@ -120,26 +110,11 @@ $response = json_decode($responseBody, true);
 if ($status < 200 || $status >= 300 || !is_array($response)) {
     $providerMessage = is_array($response) ? (string)($response['error']['message'] ?? 'unknown provider error') : 'invalid provider response';
     error_log("Bond Bot {$settings['provider']} API error ({$status}): {$providerMessage}");
-    $billingRequired = $status === 403 && str_contains(strtolower($providerMessage), 'credit card');
-    $publicStatus = $status === 429 ? 429 : 503;
-    $publicMessage = $billingRequired
-        ? 'Vercel AI Gateway billing must be activated before Bond Bot can answer.'
-        : ($status === 429 ? 'The real AI tutor is busy. Please try again shortly.' : 'The real AI tutor is temporarily unavailable.');
+    [$publicStatus, $publicMessage] = bondBotProviderErrorMessage($settings, $status, $providerMessage);
     jsonResponse(['ok' => false, 'error' => $publicMessage], $publicStatus);
 }
 
-$answer = trim((string)($response['output_text'] ?? ''));
-if ($answer === '') {
-    foreach ($response['output'] ?? [] as $item) {
-        if (!is_array($item) || ($item['type'] ?? '') !== 'message') continue;
-        foreach ($item['content'] ?? [] as $part) {
-            if (is_array($part) && ($part['type'] ?? '') === 'output_text' && isset($part['text'])) {
-                $answer .= ($answer === '' ? '' : "\n") . trim((string)$part['text']);
-            }
-        }
-    }
-}
-
+$answer = bondBotProviderAnswer($settings, $response);
 $answer = trim(mb_substr($answer, 0, 2400));
 if ($answer === '') {
     jsonResponse(['ok' => false, 'error' => 'The real AI tutor returned an empty explanation.'], 503);
