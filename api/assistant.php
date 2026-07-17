@@ -110,7 +110,6 @@ curl_setopt_array($curl, [
 $responseBody = curl_exec($curl);
 $status = (int)curl_getinfo($curl, CURLINFO_HTTP_CODE);
 $networkError = curl_error($curl);
-curl_close($curl);
 
 if (!is_string($responseBody) || $networkError !== '') {
     error_log('Bond Bot ' . $settings['provider'] . ' network error: ' . $networkError);
@@ -121,8 +120,11 @@ $response = json_decode($responseBody, true);
 if ($status < 200 || $status >= 300 || !is_array($response)) {
     $providerMessage = is_array($response) ? (string)($response['error']['message'] ?? 'unknown provider error') : 'invalid provider response';
     error_log("Bond Bot {$settings['provider']} API error ({$status}): {$providerMessage}");
+    $billingRequired = $status === 403 && str_contains(strtolower($providerMessage), 'credit card');
     $publicStatus = $status === 429 ? 429 : 503;
-    $publicMessage = $status === 429 ? 'The real AI tutor is busy. Please try again shortly.' : 'The real AI tutor is temporarily unavailable.';
+    $publicMessage = $billingRequired
+        ? 'Vercel AI Gateway billing must be activated before Bond Bot can answer.'
+        : ($status === 429 ? 'The real AI tutor is busy. Please try again shortly.' : 'The real AI tutor is temporarily unavailable.');
     jsonResponse(['ok' => false, 'error' => $publicMessage], $publicStatus);
 }
 

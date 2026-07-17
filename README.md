@@ -86,7 +86,7 @@ Expected map result: 24 building groups, zero building/building overlap, and zer
 
 ## Bond Bot AI setup
 
-Bond Bot first reads `OPENAI_API_KEY` from the web-server environment. For local XAMPP development, copy `config/openai.local.php.example` to `config/openai.local.php` and insert the API key there. Never commit that local file. `OPENAI_MODEL` is optional; the direct-provider default is `gpt-5.6-sol`. When no direct key exists on Vercel, Bond Bot uses the deployment's automatic `VERCEL_OIDC_TOKEN` with Vercel AI Gateway and the free-tier `openai/gpt-5.4-mini` model. `AI_GATEWAY_API_KEY`, `AI_GATEWAY_MODEL`, and `AI_GATEWAY_BASE_URL` remain optional overrides.
+Bond Bot first reads `OPENAI_API_KEY` from the web-server environment. For local XAMPP development, copy `config/openai.local.php.example` to `config/openai.local.php` and insert the API key there. Never commit that local file. `OPENAI_MODEL` is optional; the direct-provider default is `gpt-5.6-sol`. When no direct key exists on Vercel, Bond Bot uses the deployment's automatic `VERCEL_OIDC_TOKEN` with Vercel AI Gateway and the free-tier `openai/gpt-5.4-mini` model. Vercel requires a valid payment card on the account before those free credits can service requests. `AI_GATEWAY_API_KEY`, `AI_GATEWAY_MODEL`, and `AI_GATEWAY_BASE_URL` remain optional overrides.
 
 ## Vercel deployment
 

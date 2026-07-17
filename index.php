@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/config/openai.php';
-$bondBotConfigured = openAiSettings()['configured'];
+$bondBotSettings = openAiSettings();
+$bondBotConfigured = $bondBotSettings['configured'];
+$bondBotStatus = $bondBotSettings['provider'] === 'vercel-ai-gateway' ? 'AI GATEWAY CONNECTED' : 'REAL AI ONLINE';
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: SAMEORIGIN');
 header('Referrer-Policy: same-origin');
@@ -98,7 +100,7 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
     </aside>
 
     <aside id="ai-panel" class="side-panel ai-panel pixel-panel hidden" aria-label="Bond Bot Chemistry Companion">
-      <div class="panel-heading"><div><span class="panel-kicker">FOLLOWS YOU EVERYWHERE</span><strong>BOND BOT · GENERAL AI</strong><span class="ai-status <?= $bondBotConfigured ? 'online' : 'offline' ?>"><?= $bondBotConfigured ? 'REAL AI ONLINE' : 'REAL AI SETUP REQUIRED' ?></span></div><button id="ai-close" class="close-button" type="button" aria-label="Close assistant">×</button></div>
+      <div class="panel-heading"><div><span class="panel-kicker">FOLLOWS YOU EVERYWHERE</span><strong>BOND BOT · GENERAL AI</strong><span class="ai-status <?= $bondBotConfigured ? 'online' : 'offline' ?>"><?= $bondBotConfigured ? htmlspecialchars($bondBotStatus, ENT_QUOTES, 'UTF-8') : 'REAL AI SETUP REQUIRED' ?></span></div><button id="ai-close" class="close-button" type="button" aria-label="Close assistant">×</button></div>
       <div id="ai-chat" class="assistant-chat" role="log" aria-live="polite" aria-label="Conversation with Bond Bot">
         <div class="assistant-message bot-message"><span class="mini-robot" aria-hidden="true"><i>&gt;_</i></span><p>Ask me anything. I can help with EC015 Chemistry, mathematics, science, writing, coding, general knowledge, or your current KMKJ mission when the real AI connection is online.</p></div>
       </div>
@@ -114,7 +116,7 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
         <textarea id="ai-question" rows="3" maxlength="300" placeholder="Ask a question or continue the conversation…" autocomplete="off"></textarea>
         <button class="pixel-button primary" type="submit">ASK COMPANION</button>
       </form>
-      <p class="assistant-note">General AI answers use a secure server-side connection. The official EC015 question bank, accepted answers and marks always remain unchanged.</p>
+      <p class="assistant-note">General AI answers use a secure server-side connection and require an active provider account. The official EC015 question bank, accepted answers and marks always remain unchanged.</p>
     </aside>
 
     <section id="splash-screen" class="screen-overlay splash-screen" role="dialog" aria-modal="true" aria-labelledby="splash-title">
