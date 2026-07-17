@@ -9,11 +9,15 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     $adminCookiePath = getenv('VERCEL')
         ? '/admin/'
         : rtrim($scriptDirectory, '/') . '/';
+    $forwardedProto = strtolower(trim(explode(',', (string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''))[0]));
+    $secureRequest = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || $forwardedProto === 'https'
+        || (bool)getenv('VERCEL');
     session_name('SEVENTH_REACTION_ADMIN');
     session_set_cookie_params([
         'lifetime' => 0,
         'path' => $adminCookiePath,
-        'secure' => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
+        'secure' => $secureRequest,
         'httponly' => true,
         'samesite' => 'Strict',
     ]);
