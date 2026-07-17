@@ -41,6 +41,16 @@ CREATE TABLE IF NOT EXISTS player_progress (
   CONSTRAINT fk_progress_player FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS web_sessions (
+  session_namespace VARCHAR(32) NOT NULL,
+  session_id VARCHAR(128) NOT NULL,
+  session_data MEDIUMBLOB NOT NULL,
+  expires_at TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (session_namespace, session_id),
+  KEY idx_web_sessions_expiry (expires_at)
+) ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS course_scores (
   course_id VARCHAR(24) NOT NULL,
   total_score BIGINT UNSIGNED NOT NULL DEFAULT 0,

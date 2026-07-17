@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/config/database.php';
+require_once dirname(__DIR__) . '/config/database_session.php';
 ini_set('serialize_precision', '-1');
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -21,6 +22,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
         'httponly' => true,
         'samesite' => 'Strict',
     ]);
+    configureDatabaseSessions('admin', 7200);
     session_start();
 }
 

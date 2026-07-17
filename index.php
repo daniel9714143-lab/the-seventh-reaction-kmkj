@@ -129,7 +129,7 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
           <button id="local-continue" class="pixel-button secondary hidden" type="button">CONTINUE LOCAL SAVE</button>
           <button id="demo-player" class="text-button" type="button">PLAY OFFLINE DEMO</button>
         </div>
-        <small>BUILD 68 · CLOUD ACCOUNTS READY</small>
+        <small>BUILD 69 · CLOUD ACCOUNTS + REAL AI READY</small>
       </div>
     </section>
 
