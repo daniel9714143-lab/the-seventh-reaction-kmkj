@@ -1,0 +1,20 @@
+{
+  "name": "The Seventh Reaction — KMKJ Chemistry RPG",
+  "short_name": "7th Reaction",
+  "description": "An EC015 Chemistry adventure across the real KMKJ campus.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#02090d",
+  "theme_color": "#06141b",
+  "categories": ["education", "games"],
+  "icons": [
+    {
+      "src": "assets/seventh-reaction-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

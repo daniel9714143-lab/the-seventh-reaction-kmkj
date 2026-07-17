@@ -1,0 +1,8 @@
+config/openai.local.php
+.env
+.env.*
+!.env.example
+.vercel/
+.DS_Store
+tmp/
+.vercel
