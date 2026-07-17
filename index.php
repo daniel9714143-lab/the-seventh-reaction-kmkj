@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/config/openai.php';
-$bondBotConfigured = openAiSettings()['api_key'] !== '';
+$bondBotSettings = openAiSettings();
+$bondBotConfigured = $bondBotSettings['configured'];
+$bondBotStatus = $bondBotSettings['provider'] === 'vercel-ai-gateway' ? 'AI GATEWAY CONNECTED' : 'REAL AI ONLINE';
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: SAMEORIGIN');
 header('Referrer-Policy: same-origin');
@@ -15,13 +17,13 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#06141b">
   <meta name="description" content="The Seventh Reaction — an EC015 Chemistry adventure across the real KMKJ campus.">
-  <link rel="manifest" href="manifest.webmanifest?v=67">
+  <link rel="manifest" href="manifest.webmanifest?v=70">
   <link rel="icon" href="assets/seventh-reaction-icon.svg" type="image/svg+xml">
   <title>The Seventh Reaction · KMKJ Chemistry RPG</title>
-  <link rel="stylesheet" href="styles.css?v=67">
+  <link rel="stylesheet" href="styles.css?v=70">
 </head>
 <body>
-  <main id="app-root" class="game-shell" data-build="67" data-ai-configured="<?= $bondBotConfigured ? 'true' : 'false' ?>">
+  <main id="app-root" class="game-shell" data-build="70" data-ai-configured="<?= $bondBotConfigured ? 'true' : 'false' ?>">
     <header class="topbar pixel-panel">
       <div class="brand-lockup">
         <span class="brand-mark" aria-hidden="true">VII</span>
@@ -87,6 +89,11 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
       <label class="range-control" for="movement-speed"><span>MOVEMENT SPEED</span><output id="movement-speed-value">120</output><input id="movement-speed" type="range" min="60" max="600" step="20" value="120"></label>
       <label class="range-control" for="map-zoom"><span>MAP ZOOM</span><output id="map-zoom-value">1×</output><input id="map-zoom" type="range" min="0.125" max="3" step="0.125" value="1"></label>
       <label class="toggle-row" for="sound-toggle"><span>BACKGROUND MUSIC</span><input id="sound-toggle" type="checkbox"><i></i></label>
+      <div class="device-profile" aria-live="polite">
+        <span>DEVICE PROFILE</span>
+        <strong id="device-profile">DETECTING DEVICE…</strong>
+        <small id="device-controls">Selecting the best controls…</small>
+      </div>
       <label class="teleport-control" for="teleport-destination"><span>FAST TRAVEL · UNLOCKED ONLY</span><select id="teleport-destination"></select></label>
       <button id="teleport-cafeteria" class="pixel-button primary settings-teleport" type="button">TELEPORT TO KAFETERIA · ALWAYS OPEN</button>
       <button id="teleport-objective" class="pixel-button primary settings-teleport" type="button">TELEPORT TO SELECTED PLACE</button>
@@ -98,7 +105,7 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
     </aside>
 
     <aside id="ai-panel" class="side-panel ai-panel pixel-panel hidden" aria-label="Bond Bot Chemistry Companion">
-      <div class="panel-heading"><div><span class="panel-kicker">FOLLOWS YOU EVERYWHERE</span><strong>BOND BOT · GENERAL AI</strong><span class="ai-status <?= $bondBotConfigured ? 'online' : 'offline' ?>"><?= $bondBotConfigured ? 'REAL AI ONLINE' : 'REAL AI SETUP REQUIRED' ?></span></div><button id="ai-close" class="close-button" type="button" aria-label="Close assistant">×</button></div>
+      <div class="panel-heading"><div><span class="panel-kicker">FOLLOWS YOU EVERYWHERE</span><strong>BOND BOT · GENERAL AI</strong><span class="ai-status <?= $bondBotConfigured ? 'online' : 'offline' ?>"><?= $bondBotConfigured ? htmlspecialchars($bondBotStatus, ENT_QUOTES, 'UTF-8') : 'REAL AI SETUP REQUIRED' ?></span></div><button id="ai-close" class="close-button" type="button" aria-label="Close assistant">×</button></div>
       <div id="ai-chat" class="assistant-chat" role="log" aria-live="polite" aria-label="Conversation with Bond Bot">
         <div class="assistant-message bot-message"><span class="mini-robot" aria-hidden="true"><i>&gt;_</i></span><p>Ask me anything. I can help with EC015 Chemistry, mathematics, science, writing, coding, general knowledge, or your current KMKJ mission when the real AI connection is online.</p></div>
       </div>
@@ -114,7 +121,7 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
         <textarea id="ai-question" rows="3" maxlength="300" placeholder="Ask a question or continue the conversation…" autocomplete="off"></textarea>
         <button class="pixel-button primary" type="submit">ASK COMPANION</button>
       </form>
-      <p class="assistant-note">General AI answers require a server-side API key. The official EC015 question bank, accepted answers and marks always remain unchanged.</p>
+      <p class="assistant-note">General AI answers use a secure server-side connection and require an active provider account. The official EC015 question bank, accepted answers and marks always remain unchanged.</p>
     </aside>
 
     <section id="splash-screen" class="screen-overlay splash-screen" role="dialog" aria-modal="true" aria-labelledby="splash-title">
@@ -129,7 +136,7 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
           <button id="local-continue" class="pixel-button secondary hidden" type="button">CONTINUE LOCAL SAVE</button>
           <button id="demo-player" class="text-button" type="button">PLAY OFFLINE DEMO</button>
         </div>
-        <small>BUILD 67 · KAFETERIA FAST TRAVEL ALWAYS OPEN</small>
+        <small>BUILD 70 · PHONE + TABLET + LAPTOP READY</small>
       </div>
     </section>
 
@@ -278,16 +285,18 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
     <div id="toast" class="toast pixel-panel hidden" role="status" aria-live="polite"></div>
   </main>
 
-  <script src="map-data.js?v=67"></script>
-  <script src="content.js?v=67"></script>
-  <script src="state.js?v=67"></script>
-  <script src="sprites.js?v=67"></script>
-  <script src="game.js?v=67"></script>
-  <script src="runtime.js?v=67"></script>
-  <script src="interiors.js?v=67"></script>
-  <script src="minigames.js?v=67"></script>
-  <script src="audio.js?v=67"></script>
-  <script src="assistant.js?v=67"></script>
-  <script src="app.js?v=67"></script>
+  <div id="orientation-tip" class="orientation-tip hidden" role="status">PORTRAIT MODE READY · ROTATE FOR A WIDER CAMPUS VIEW</div>
+  <script src="device.js?v=70"></script>
+  <script src="map-data.js?v=70"></script>
+  <script src="content.js?v=70"></script>
+  <script src="state.js?v=70"></script>
+  <script src="sprites.js?v=70"></script>
+  <script src="game.js?v=70"></script>
+  <script src="runtime.js?v=70"></script>
+  <script src="interiors.js?v=70"></script>
+  <script src="minigames.js?v=70"></script>
+  <script src="audio.js?v=70"></script>
+  <script src="assistant.js?v=70"></script>
+  <script src="app.js?v=70"></script>
 </body>
 </html>

@@ -2,17 +2,27 @@
 declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/config/database.php';
+require_once dirname(__DIR__) . '/config/database_session.php';
 ini_set('serialize_precision', '-1');
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
+    $scriptDirectory = str_replace('\\', '/', dirname((string)($_SERVER['SCRIPT_NAME'] ?? '/admin/index.php')));
+    $adminCookiePath = getenv('VERCEL')
+        ? '/admin/'
+        : rtrim($scriptDirectory, '/') . '/';
+    $forwardedProto = strtolower(trim(explode(',', (string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''))[0]));
+    $secureRequest = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || $forwardedProto === 'https'
+        || (bool)getenv('VERCEL');
     session_name('SEVENTH_REACTION_ADMIN');
     session_set_cookie_params([
         'lifetime' => 0,
-        'path' => '/kmkj-chemistry-quest/admin/',
-        'secure' => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
+        'path' => $adminCookiePath,
+        'secure' => $secureRequest,
         'httponly' => true,
         'samesite' => 'Strict',
     ]);
+    configureDatabaseSessions('admin', 7200);
     session_start();
 }
 

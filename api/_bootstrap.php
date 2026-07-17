@@ -2,17 +2,23 @@
 declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/config/database.php';
+require_once dirname(__DIR__) . '/config/database_session.php';
 ini_set('serialize_precision', '-1');
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
+    $forwardedProto = strtolower(trim(explode(',', (string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''))[0]));
+    $secureRequest = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || $forwardedProto === 'https'
+        || (bool)getenv('VERCEL');
     session_name('SEVENTH_REACTION_SESSION');
     session_set_cookie_params([
         'lifetime' => 0,
         'path' => '/',
-        'secure' => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
+        'secure' => $secureRequest,
         'httponly' => true,
         'samesite' => 'Lax',
     ]);
+    configureDatabaseSessions('player', 86400);
     session_start();
 }
 
