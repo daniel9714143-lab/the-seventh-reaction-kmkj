@@ -15,13 +15,13 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#06141b">
   <meta name="description" content="The Seventh Reaction — an EC015 Chemistry adventure across the real KMKJ campus.">
-  <link rel="manifest" href="manifest.webmanifest?v=67">
+  <link rel="manifest" href="manifest.webmanifest?v=68">
   <link rel="icon" href="assets/seventh-reaction-icon.svg" type="image/svg+xml">
   <title>The Seventh Reaction · KMKJ Chemistry RPG</title>
-  <link rel="stylesheet" href="styles.css?v=67">
+  <link rel="stylesheet" href="styles.css?v=68">
 </head>
 <body>
-  <main id="app-root" class="game-shell" data-build="67" data-ai-configured="<?= $bondBotConfigured ? 'true' : 'false' ?>">
+  <main id="app-root" class="game-shell" data-build="68" data-ai-configured="<?= $bondBotConfigured ? 'true' : 'false' ?>">
     <header class="topbar pixel-panel">
       <div class="brand-lockup">
         <span class="brand-mark" aria-hidden="true">VII</span>
@@ -129,7 +129,7 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
           <button id="local-continue" class="pixel-button secondary hidden" type="button">CONTINUE LOCAL SAVE</button>
           <button id="demo-player" class="text-button" type="button">PLAY OFFLINE DEMO</button>
         </div>
-        <small>BUILD 67 · KAFETERIA FAST TRAVEL ALWAYS OPEN</small>
+        <small>BUILD 68 · CLOUD ACCOUNTS READY</small>
       </div>
     </section>
 
@@ -278,16 +278,16 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
     <div id="toast" class="toast pixel-panel hidden" role="status" aria-live="polite"></div>
   </main>
 
-  <script src="map-data.js?v=67"></script>
-  <script src="content.js?v=67"></script>
-  <script src="state.js?v=67"></script>
-  <script src="sprites.js?v=67"></script>
-  <script src="game.js?v=67"></script>
-  <script src="runtime.js?v=67"></script>
-  <script src="interiors.js?v=67"></script>
-  <script src="minigames.js?v=67"></script>
-  <script src="audio.js?v=67"></script>
-  <script src="assistant.js?v=67"></script>
-  <script src="app.js?v=67"></script>
+  <script src="map-data.js?v=68"></script>
+  <script src="content.js?v=68"></script>
+  <script src="state.js?v=68"></script>
+  <script src="sprites.js?v=68"></script>
+  <script src="game.js?v=68"></script>
+  <script src="runtime.js?v=68"></script>
+  <script src="interiors.js?v=68"></script>
+  <script src="minigames.js?v=68"></script>
+  <script src="audio.js?v=68"></script>
+  <script src="assistant.js?v=68"></script>
+  <script src="app.js?v=68"></script>
 </body>
 </html>
