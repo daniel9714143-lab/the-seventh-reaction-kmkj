@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/config/openai.php';
-$bondBotConfigured = openAiSettings()['api_key'] !== '';
+$bondBotConfigured = openAiSettings()['configured'];
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: SAMEORIGIN');
 header('Referrer-Policy: same-origin');
@@ -15,13 +15,13 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#06141b">
   <meta name="description" content="The Seventh Reaction — an EC015 Chemistry adventure across the real KMKJ campus.">
-  <link rel="manifest" href="manifest.webmanifest?v=68">
+  <link rel="manifest" href="manifest.webmanifest?v=69">
   <link rel="icon" href="assets/seventh-reaction-icon.svg" type="image/svg+xml">
   <title>The Seventh Reaction · KMKJ Chemistry RPG</title>
-  <link rel="stylesheet" href="styles.css?v=68">
+  <link rel="stylesheet" href="styles.css?v=69">
 </head>
 <body>
-  <main id="app-root" class="game-shell" data-build="68" data-ai-configured="<?= $bondBotConfigured ? 'true' : 'false' ?>">
+  <main id="app-root" class="game-shell" data-build="69" data-ai-configured="<?= $bondBotConfigured ? 'true' : 'false' ?>">
     <header class="topbar pixel-panel">
       <div class="brand-lockup">
         <span class="brand-mark" aria-hidden="true">VII</span>
@@ -114,7 +114,7 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
         <textarea id="ai-question" rows="3" maxlength="300" placeholder="Ask a question or continue the conversation…" autocomplete="off"></textarea>
         <button class="pixel-button primary" type="submit">ASK COMPANION</button>
       </form>
-      <p class="assistant-note">General AI answers require a server-side API key. The official EC015 question bank, accepted answers and marks always remain unchanged.</p>
+      <p class="assistant-note">General AI answers use a secure server-side connection. The official EC015 question bank, accepted answers and marks always remain unchanged.</p>
     </aside>
 
     <section id="splash-screen" class="screen-overlay splash-screen" role="dialog" aria-modal="true" aria-labelledby="splash-title">
@@ -278,16 +278,16 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
     <div id="toast" class="toast pixel-panel hidden" role="status" aria-live="polite"></div>
   </main>
 
-  <script src="map-data.js?v=68"></script>
-  <script src="content.js?v=68"></script>
-  <script src="state.js?v=68"></script>
-  <script src="sprites.js?v=68"></script>
-  <script src="game.js?v=68"></script>
-  <script src="runtime.js?v=68"></script>
-  <script src="interiors.js?v=68"></script>
-  <script src="minigames.js?v=68"></script>
-  <script src="audio.js?v=68"></script>
-  <script src="assistant.js?v=68"></script>
-  <script src="app.js?v=68"></script>
+  <script src="map-data.js?v=69"></script>
+  <script src="content.js?v=69"></script>
+  <script src="state.js?v=69"></script>
+  <script src="sprites.js?v=69"></script>
+  <script src="game.js?v=69"></script>
+  <script src="runtime.js?v=69"></script>
+  <script src="interiors.js?v=69"></script>
+  <script src="minigames.js?v=69"></script>
+  <script src="audio.js?v=69"></script>
+  <script src="assistant.js?v=69"></script>
+  <script src="app.js?v=69"></script>
 </body>
 </html>

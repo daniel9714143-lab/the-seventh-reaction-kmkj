@@ -59,7 +59,7 @@ $context = [
 ];
 
 $settings = openAiSettings();
-if ($settings['api_key'] === '') {
+if (!$settings['configured']) {
     jsonResponse(['ok' => false, 'configured' => false, 'error' => 'Real AI is not configured on this server.'], 503);
 }
 
@@ -113,14 +113,14 @@ $networkError = curl_error($curl);
 curl_close($curl);
 
 if (!is_string($responseBody) || $networkError !== '') {
-    error_log('Bond Bot network error: ' . $networkError);
+    error_log('Bond Bot ' . $settings['provider'] . ' network error: ' . $networkError);
     jsonResponse(['ok' => false, 'error' => 'The real AI tutor could not be reached.'], 503);
 }
 
 $response = json_decode($responseBody, true);
 if ($status < 200 || $status >= 300 || !is_array($response)) {
     $providerMessage = is_array($response) ? (string)($response['error']['message'] ?? 'unknown provider error') : 'invalid provider response';
-    error_log("Bond Bot API error ({$status}): {$providerMessage}");
+    error_log("Bond Bot {$settings['provider']} API error ({$status}): {$providerMessage}");
     $publicStatus = $status === 429 ? 429 : 503;
     $publicMessage = $status === 429 ? 'The real AI tutor is busy. Please try again shortly.' : 'The real AI tutor is temporarily unavailable.';
     jsonResponse(['ok' => false, 'error' => $publicMessage], $publicStatus);
@@ -146,6 +146,6 @@ if ($answer === '') {
 jsonResponse([
     'ok' => true,
     'answer' => $answer,
-    'provider' => 'openai',
+    'provider' => $settings['provider'],
     'model' => (string)($response['model'] ?? $settings['model']),
 ]);
