@@ -24,6 +24,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  min-height: 100dvh;
   color: var(--ink);
   background:
     linear-gradient(90deg, #0a293422 1px, transparent 1px) 0 0 / 24px 24px,
@@ -123,6 +124,10 @@ kbd { min-width: 24px; padding: 4px 6px; text-align: center; color: var(--ink); 
 .toggle-row i { position: relative; width: 42px; height: 20px; border: 2px solid var(--line); background: #07151b; }
 .toggle-row i::after { content: ""; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; background: var(--muted); transition: transform .1s steps(2, end); }
 .toggle-row input:checked + i::after { background: var(--cyan); transform: translateX(20px); }
+.device-profile { display: grid; gap: 5px; margin: 18px 0; padding: 11px; border: 1px solid #315d66; background: #041319; }
+.device-profile span { color: var(--muted); font-size: 8px; letter-spacing: .12em; }
+.device-profile strong { color: var(--cyan); font-size: 10px; line-height: 1.45; }
+.device-profile small { color: #d3eadf; font-size: 8px; line-height: 1.45; }
 .panel-note { margin: 17px 0 0; color: var(--muted); font-size: 9px; line-height: 1.55; }
 
 .ai-orb { position: relative; z-index: 1; display: flex; flex: 0 0 58px; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 58px; height: 52px; padding: 3px; color: var(--cyan); border: 2px solid #dffff6; border-radius: 0; background: #09232cf2; box-shadow: 3px 3px 0 #000, 0 0 12px #63b7ee66; cursor: pointer; }
@@ -174,7 +179,7 @@ kbd { min-width: 24px; padding: 4px 6px; text-align: center; color: var(--ink); 
 .teleport-control select { width: 100%; padding: 10px; color: var(--ink); border: 2px solid var(--line); border-radius: 0; background: #031016; }
 .text-button { border: 0; background: transparent; color: var(--cyan); cursor: pointer; font-size: 10px; text-decoration: underline; text-underline-offset: 4px; }
 
-.screen-overlay { position: fixed; z-index: 50; inset: 0; display: grid; place-items: center; padding: 18px; overflow: auto; background: #020a0eea; backdrop-filter: blur(2px); }
+.screen-overlay { position: fixed; z-index: 50; inset: 0; display: grid; place-items: center; min-height: 100dvh; padding: max(18px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left)); overflow: auto; background: #020a0eea; backdrop-filter: blur(2px); }
 
 .interior-screen { z-index: 45; padding: 12px; background: #02090df5; }
 .interior-shell { width: min(1180px, 100%); padding: 14px; border-color: #e9fff4; box-shadow: 8px 8px 0 #000, 0 0 0 4px #14343d; }
@@ -404,6 +409,173 @@ kbd { min-width: 24px; padding: 4px 6px; text-align: center; color: var(--ink); 
   .ending-actions { grid-template-columns: 1fr; }
   .letter-screen { grid-template-columns: 1fr; }.letter-envelope { display: none; }
   .mission-letter { padding: 30px 24px; }.letter-seal { display: none; }
+}
+
+/* Capability-based layout: the canvas keeps one immutable world coordinate system. */
+html[data-input="touch"] button,
+html[data-input="touch"] input,
+html[data-input="touch"] select,
+html[data-input="touch"] textarea,
+html[data-input="hybrid"] button,
+html[data-input="hybrid"] input,
+html[data-input="hybrid"] select,
+html[data-input="hybrid"] textarea { min-height: 44px; }
+
+html[data-device="phone"] body,
+html[data-device="tablet"] body { overscroll-behavior: none; }
+
+html[data-device="phone"] .game-shell,
+html[data-device="tablet"] .game-shell {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+html[data-device="phone"] .controls,
+html[data-device="tablet"][data-input="touch"] .controls { display: none; }
+
+html[data-device="phone"][data-input="touch"] .mobile-controls,
+html[data-device="phone"][data-input="hybrid"] .mobile-controls,
+html[data-device="tablet"][data-input="touch"] .mobile-controls,
+html[data-device="tablet"][data-input="hybrid"] .mobile-controls {
+  position: absolute;
+  z-index: 6;
+  left: max(12px, env(safe-area-inset-left));
+  bottom: max(12px, env(safe-area-inset-bottom));
+  display: grid;
+  grid-template-columns: repeat(4, 48px);
+  grid-template-rows: repeat(2, 48px);
+  gap: 5px;
+  opacity: .88;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html[data-device="phone"] .mobile-controls button,
+html[data-device="tablet"] .mobile-controls button {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  color: var(--ink);
+  border: 2px solid #d9f7eb;
+  background: #08202aeb;
+  box-shadow: 2px 2px #000;
+  font-size: 17px;
+}
+
+html[data-device="phone"] .mobile-controls button:active,
+html[data-device="tablet"] .mobile-controls button:active { transform: translate(2px, 2px); box-shadow: none; background: #1f5964; }
+html[data-device="phone"] .mobile-controls button:nth-child(1),
+html[data-device="tablet"] .mobile-controls button:nth-child(1) { grid-column: 2; grid-row: 1; }
+html[data-device="phone"] .mobile-controls button:nth-child(2),
+html[data-device="tablet"] .mobile-controls button:nth-child(2) { grid-column: 1; grid-row: 2; }
+html[data-device="phone"] .mobile-controls button:nth-child(3),
+html[data-device="tablet"] .mobile-controls button:nth-child(3) { grid-column: 2; grid-row: 2; }
+html[data-device="phone"] .mobile-controls button:nth-child(4),
+html[data-device="tablet"] .mobile-controls button:nth-child(4) { grid-column: 3; grid-row: 2; }
+html[data-device="phone"] .mobile-controls .mobile-action,
+html[data-device="tablet"] .mobile-controls .mobile-action { grid-column: 4; grid-row: 2; color: var(--night); border-color: #fff7bd; background: var(--yellow); }
+
+html[data-device="phone"][data-input="touch"] .interior-touch,
+html[data-device="phone"][data-input="hybrid"] .interior-touch,
+html[data-device="tablet"][data-input="touch"] .interior-touch,
+html[data-device="tablet"][data-input="hybrid"] .interior-touch {
+  position: absolute;
+  z-index: 4;
+  left: max(10px, env(safe-area-inset-left));
+  bottom: max(10px, env(safe-area-inset-bottom));
+  display: grid;
+  grid-template-columns: repeat(5, 48px);
+  gap: 5px;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html[data-device="phone"] .interior-touch button,
+html[data-device="tablet"] .interior-touch button { width: 48px; height: 48px; padding: 0; color: var(--ink); border: 2px solid #d9f7eb; background: #08202aeb; box-shadow: 2px 2px #000; }
+html[data-device="phone"] .interior-touch [data-interior-action],
+html[data-device="tablet"] .interior-touch [data-interior-action] { color: var(--night); border-color: #fff7bd; background: var(--yellow); }
+
+html[data-input="keyboard"] .mobile-controls,
+html[data-input="keyboard"] .interior-touch { display: none; }
+
+html[data-device="tablet"] .game-shell { width: min(1360px, calc(100vw - 20px)); padding-top: 10px; }
+html[data-device="tablet"] .side-panel { max-height: calc(100dvh - 112px); }
+html[data-device="tablet"][data-orientation="portrait"] .game-layout { grid-template-columns: 1fr; }
+html[data-device="tablet"][data-orientation="portrait"] .quest-card { position: static; min-height: 0; display: grid; grid-template-columns: 150px 1fr; gap: 4px 14px; padding: 11px 14px; }
+html[data-device="tablet"][data-orientation="portrait"] .quest-card .panel-kicker,
+html[data-device="tablet"][data-orientation="portrait"] .quest-card strong { grid-column: 1; }
+html[data-device="tablet"][data-orientation="portrait"] .quest-card p { grid-column: 2; grid-row: 1 / span 2; }
+html[data-device="tablet"][data-orientation="portrait"] .chapter-track { grid-column: 1 / -1; margin-top: 7px; }
+html[data-device="tablet"][data-orientation="portrait"] .save-status { display: none; }
+
+html[data-device="phone"] .game-shell { width: 100%; min-height: 100dvh; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+html[data-device="phone"] .topbar { padding-left: max(8px, env(safe-area-inset-left)); padding-right: max(8px, env(safe-area-inset-right)); }
+html[data-device="phone"] .quest-card p { font-size: 9px; line-height: 1.45; }
+html[data-device="phone"] .chapter-track { margin-top: 4px; }
+html[data-device="phone"] .game-frame { min-height: 360px; }
+html[data-device="phone"] .game-frame canvas { object-fit: cover; }
+html[data-device="phone"] .side-panel {
+  top: auto;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  max-height: 88dvh;
+  padding: 18px max(16px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  border-width: 2px 0 0;
+  box-shadow: 0 -5px 0 #000, 0 0 0 3px #14343c;
+}
+html[data-device="phone"] .assistant-chat { max-height: min(240px, 31dvh); }
+html[data-device="phone"] .screen-overlay { place-items: start center; padding: max(10px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left)); }
+html[data-device="phone"] .modal-card,
+html[data-device="phone"] .wide-modal,
+html[data-device="phone"] .quiz-card,
+html[data-device="phone"] .mini-game-card { margin: auto; max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 20px); overflow: auto; }
+html[data-device="phone"] .interior-shell { min-height: 100dvh; }
+html[data-device="phone"] .restaurant-leaderboard { min-height: 100dvh; }
+html[data-device="phone"] .mini-controls { flex-wrap: wrap; }
+html[data-device="phone"] .mini-controls > button:not(.pixel-button) { width: 52px; height: 48px; }
+
+html[data-device="phone"][data-orientation="portrait"] .game-frame { height: calc(100dvh - 168px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); max-height: none; }
+html[data-device="phone"][data-orientation="portrait"] .quest-card { grid-template-columns: 112px 1fr; padding: 8px 10px; }
+html[data-device="phone"][data-orientation="portrait"] .quest-card strong { font-size: 11px; }
+
+html[data-device="phone"][data-orientation="landscape"] .topbar { min-height: 50px; padding-top: 5px; padding-bottom: 5px; }
+html[data-device="phone"][data-orientation="landscape"] .eyebrow { display: none; }
+html[data-device="phone"][data-orientation="landscape"] .game-layout { position: relative; display: block; }
+html[data-device="phone"][data-orientation="landscape"] .game-frame { height: calc(100dvh - 50px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); min-height: 260px; }
+html[data-device="phone"][data-orientation="landscape"] .quest-card { position: absolute; z-index: 4; top: 8px; left: max(8px, env(safe-area-inset-left)); width: min(300px, 43vw); min-height: 0; display: block; padding: 8px 10px; border: 1px solid var(--line); background: #061820df; }
+html[data-device="phone"][data-orientation="landscape"] .quest-card .panel-kicker,
+html[data-device="phone"][data-orientation="landscape"] .quest-card p,
+html[data-device="phone"][data-orientation="landscape"] .quest-card .chapter-track,
+html[data-device="phone"][data-orientation="landscape"] .quest-card .save-status { display: none; }
+html[data-device="phone"][data-orientation="landscape"] .quest-card strong { margin: 0; font-size: 9px; }
+html[data-device="phone"][data-orientation="landscape"] .location-banner { top: 7px; max-width: 42%; }
+html[data-device="phone"][data-orientation="landscape"] .side-panel { max-height: 100dvh; }
+html[data-device="phone"][data-orientation="landscape"] .screen-overlay { place-items: center; }
+html[data-device="phone"][data-orientation="landscape"] .interior-screen { padding: 0; }
+html[data-device="phone"][data-orientation="landscape"] .interior-shell { min-height: 100dvh; padding: 6px max(8px, env(safe-area-inset-right)) 6px max(8px, env(safe-area-inset-left)); }
+html[data-device="phone"][data-orientation="landscape"] .interior-header { margin-bottom: 5px; }
+html[data-device="phone"][data-orientation="landscape"] .interior-header h2 { font-size: 16px; }
+html[data-device="phone"][data-orientation="landscape"] .interior-footer { display: none; }
+
+.orientation-tip {
+  position: fixed;
+  z-index: 95;
+  right: max(10px, env(safe-area-inset-right));
+  bottom: max(10px, env(safe-area-inset-bottom));
+  left: max(10px, env(safe-area-inset-left));
+  padding: 9px 12px;
+  color: var(--night);
+  border: 2px solid #fff5bd;
+  background: var(--yellow);
+  box-shadow: 3px 3px #000;
+  text-align: center;
+  font-size: 8px;
+  line-height: 1.4;
+  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

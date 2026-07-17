@@ -1,19 +1,20 @@
-const CACHE_NAME = 'seventh-reaction-build-69';
+const CACHE_NAME = 'seventh-reaction-build-70';
 const APP_SHELL = [
   './',
-  'styles.css?v=69',
-  'map-data.js?v=69',
-  'content.js?v=69',
-  'state.js?v=69',
-  'sprites.js?v=69',
-  'game.js?v=69',
-  'runtime.js?v=69',
-  'interiors.js?v=69',
-  'minigames.js?v=69',
-  'audio.js?v=69',
-  'assistant.js?v=69',
-  'app.js?v=69',
-  'manifest.webmanifest?v=69',
+  'styles.css?v=70',
+  'device.js?v=70',
+  'map-data.js?v=70',
+  'content.js?v=70',
+  'state.js?v=70',
+  'sprites.js?v=70',
+  'game.js?v=70',
+  'runtime.js?v=70',
+  'interiors.js?v=70',
+  'minigames.js?v=70',
+  'audio.js?v=70',
+  'assistant.js?v=70',
+  'app.js?v=70',
+  'manifest.webmanifest?v=70',
   'assets/seventh-reaction-icon.svg'
 ];
 

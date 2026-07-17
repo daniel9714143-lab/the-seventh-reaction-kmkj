@@ -17,13 +17,13 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#06141b">
   <meta name="description" content="The Seventh Reaction — an EC015 Chemistry adventure across the real KMKJ campus.">
-  <link rel="manifest" href="manifest.webmanifest?v=69">
+  <link rel="manifest" href="manifest.webmanifest?v=70">
   <link rel="icon" href="assets/seventh-reaction-icon.svg" type="image/svg+xml">
   <title>The Seventh Reaction · KMKJ Chemistry RPG</title>
-  <link rel="stylesheet" href="styles.css?v=69">
+  <link rel="stylesheet" href="styles.css?v=70">
 </head>
 <body>
-  <main id="app-root" class="game-shell" data-build="69" data-ai-configured="<?= $bondBotConfigured ? 'true' : 'false' ?>">
+  <main id="app-root" class="game-shell" data-build="70" data-ai-configured="<?= $bondBotConfigured ? 'true' : 'false' ?>">
     <header class="topbar pixel-panel">
       <div class="brand-lockup">
         <span class="brand-mark" aria-hidden="true">VII</span>
@@ -89,6 +89,11 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
       <label class="range-control" for="movement-speed"><span>MOVEMENT SPEED</span><output id="movement-speed-value">120</output><input id="movement-speed" type="range" min="60" max="600" step="20" value="120"></label>
       <label class="range-control" for="map-zoom"><span>MAP ZOOM</span><output id="map-zoom-value">1×</output><input id="map-zoom" type="range" min="0.125" max="3" step="0.125" value="1"></label>
       <label class="toggle-row" for="sound-toggle"><span>BACKGROUND MUSIC</span><input id="sound-toggle" type="checkbox"><i></i></label>
+      <div class="device-profile" aria-live="polite">
+        <span>DEVICE PROFILE</span>
+        <strong id="device-profile">DETECTING DEVICE…</strong>
+        <small id="device-controls">Selecting the best controls…</small>
+      </div>
       <label class="teleport-control" for="teleport-destination"><span>FAST TRAVEL · UNLOCKED ONLY</span><select id="teleport-destination"></select></label>
       <button id="teleport-cafeteria" class="pixel-button primary settings-teleport" type="button">TELEPORT TO KAFETERIA · ALWAYS OPEN</button>
       <button id="teleport-objective" class="pixel-button primary settings-teleport" type="button">TELEPORT TO SELECTED PLACE</button>
@@ -131,7 +136,7 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
           <button id="local-continue" class="pixel-button secondary hidden" type="button">CONTINUE LOCAL SAVE</button>
           <button id="demo-player" class="text-button" type="button">PLAY OFFLINE DEMO</button>
         </div>
-        <small>BUILD 69 · CLOUD ACCOUNTS + REAL AI READY</small>
+        <small>BUILD 70 · PHONE + TABLET + LAPTOP READY</small>
       </div>
     </section>
 
@@ -280,16 +285,18 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
     <div id="toast" class="toast pixel-panel hidden" role="status" aria-live="polite"></div>
   </main>
 
-  <script src="map-data.js?v=69"></script>
-  <script src="content.js?v=69"></script>
-  <script src="state.js?v=69"></script>
-  <script src="sprites.js?v=69"></script>
-  <script src="game.js?v=69"></script>
-  <script src="runtime.js?v=69"></script>
-  <script src="interiors.js?v=69"></script>
-  <script src="minigames.js?v=69"></script>
-  <script src="audio.js?v=69"></script>
-  <script src="assistant.js?v=69"></script>
-  <script src="app.js?v=69"></script>
+  <div id="orientation-tip" class="orientation-tip hidden" role="status">PORTRAIT MODE READY · ROTATE FOR A WIDER CAMPUS VIEW</div>
+  <script src="device.js?v=70"></script>
+  <script src="map-data.js?v=70"></script>
+  <script src="content.js?v=70"></script>
+  <script src="state.js?v=70"></script>
+  <script src="sprites.js?v=70"></script>
+  <script src="game.js?v=70"></script>
+  <script src="runtime.js?v=70"></script>
+  <script src="interiors.js?v=70"></script>
+  <script src="minigames.js?v=70"></script>
+  <script src="audio.js?v=70"></script>
+  <script src="assistant.js?v=70"></script>
+  <script src="app.js?v=70"></script>
 </body>
 </html>
