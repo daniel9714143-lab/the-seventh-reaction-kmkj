@@ -5,10 +5,14 @@ require_once dirname(__DIR__) . '/config/database.php';
 ini_set('serialize_precision', '-1');
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
+    $scriptDirectory = str_replace('\\', '/', dirname((string)($_SERVER['SCRIPT_NAME'] ?? '/admin/index.php')));
+    $adminCookiePath = getenv('VERCEL')
+        ? '/admin/'
+        : rtrim($scriptDirectory, '/') . '/';
     session_name('SEVENTH_REACTION_ADMIN');
     session_set_cookie_params([
         'lifetime' => 0,
-        'path' => '/kmkj-chemistry-quest/admin/',
+        'path' => $adminCookiePath,
         'secure' => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
         'httponly' => true,
         'samesite' => 'Strict',
